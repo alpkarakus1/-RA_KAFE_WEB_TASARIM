@@ -197,82 +197,83 @@
         <p>&copy; 2026 Şîra Bahçe. Tüm Hakları Saklıdır.</p>
     </footer>
 
-    <!-- JavaScript Kodları -->
+  <!-- Firebase SDK'ları -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <!-- Gizli Yönetici Bildirim Alanı (Kasa Ekranı İçin) -->
+    <div id="adminNotifications" class="fixed top-24 right-6 z-50 flex flex-col gap-3 w-72 pointer-events-none"></div>
+
     <script>
-        function getDirections(e) {
-            e.preventDefault(); 
-            const destination = "Şîra Bahçe, Atatürk, Karlı Sokağı, 34785 Sancaktepe/İstanbul";
+        // DİKKAT: Aynı firebaseConfig kodunu buraya da yapıştır!
+        const firebaseConfig = {
+    apiKey: "AIzaSyDYPGv3F379PSli4z3C9P30gqhbho4SHnE",
+    authDomain: "sirabahce-21be3.firebaseapp.com",
+    databaseURL: "https://sirabahce-21be3-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "sirabahce-21be3",
+    storageBucket: "sirabahce-21be3.firebasestorage.app",
+    messagingSenderId: "753122069758",
+    appId: "1:753122069758:web:ba282e33f3676ccfa0a9af",
+    measurementId: "G-66FDDYP3ED"
+            // ...
+        };
+        
+        // Sadece bir kez initialize edip çalışmasını sağlamak için kontrol ekliyoruz
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        // Yönetici Panelini Başlatmak İçin "Gizli Tuş Kombinasyonu"
+        // Footer'daki telif hakkı yazısına (2026 Şîra Bahçe) çift tıklayınca sistemi aktif eder.
+        document.querySelector('footer').addEventListener('dblclick', () => {
+            alert("Kasa / Yönetici Modu Aktifleştirildi! Yeni çağrılar dinleniyor...");
             
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${encodeURIComponent(destination)}`;
-                        window.open(url, '_blank');
-                    },
-                    (error) => {
-                        const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
-                        window.open(url, '_blank');
-                    }
-                );
-            } else {
-                const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
-                window.open(url, '_blank');
-            }
+            // "cagrilar" veritabanını dinlemeye başla
+            db.ref('cagrilar').limitToLast(1).on('child_added', (snapshot) => {
+                const data = snapshot.val();
+                
+                // Sadece son 1 dakika içindeki çağrılara ses çal (Geçmişleri çalmamak için)
+                const now = Date.now();
+                if (now - data.timestamp < 60000) { 
+                    playAlertSound();
+                    showAdminAlert(data.masa, data.talep, data.saat);
+                }
+            });
+        });
+
+        function playAlertSound() {
+            // Standart bir uyarı sesi çal
+            const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+            audio.play();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const totalTables = 12;
-            let tables = JSON.parse(localStorage.getItem('siraBahce12Tables')) || Array(totalTables).fill('müsait');
+        function showAdminAlert(masa, talep, saat) {
+            const container = document.getElementById('adminNotifications');
+            const alertBox = document.createElement('div');
+            
+            const isGarson = talep.includes("Garson");
+            alertBox.className = `p-4 rounded-xl shadow-2xl text-white font-bold animate-bounce pointer-events-auto flex items-center justify-between cursor-pointer ${isGarson ? 'bg-amber-500' : 'bg-red-600'}`;
+            
+            alertBox.innerHTML = `
+                <div>
+                    <div class="text-xs uppercase tracking-wider opacity-80 mb-1">${saat} - YENİ ÇAĞRI</div>
+                    <div class="text-xl">${masa}</div>
+                    <div class="text-sm font-medium">${talep}</div>
+                </div>
+                <div class="text-3xl">🛎️</div>
+            `;
 
-            const tableGrid = document.getElementById('tableGrid');
-            const tableSelect = document.getElementById('tableSelect');
-            const resForm = document.getElementById('resForm');
+            // Tıklayınca bildirimi kapat
+            alertBox.onclick = () => alertBox.remove();
+            
+            container.appendChild(alertBox);
+        }
 
-            function renderTables() {
-                tableGrid.innerHTML = '';
-                tableSelect.innerHTML = '<option value="">Masa Seçin...</option>';
-
-                tables.forEach((status, index) => {
-                    const isAvail = status === 'müsait';
-                    
-                    const div = document.createElement('div');
-                    div.className = `p-3 rounded-xl text-center border-2 font-bold flex flex-col items-center justify-center h-24 transition-colors ${
-                        isAvail ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-red-50 border-red-400 text-red-600 opacity-70'
-                    }`;
-                    div.innerHTML = `<span class="text-2xl mb-1">🍽️</span><span class="text-sm">Masa ${index + 1}</span><span class="text-[10px] uppercase mt-1 tracking-wider ${isAvail ? 'text-emerald-600' : 'text-red-500'}">${status}</span>`;
-                    tableGrid.appendChild(div);
-
-                    if (isAvail) {
-                        const opt = document.createElement('option');
-                        opt.value = index;
-                        opt.textContent = `Masa ${index + 1}`;
-                        tableSelect.appendChild(opt);
-                    }
-                });
-            }
-
-            resForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const selectedIdx = tableSelect.value;
-                
-                if(selectedIdx === "") {
-                    alert("Lütfen müsait bir masa seçin.");
-                    return;
-                }
-
-                tables[selectedIdx] = 'dolu';
-                localStorage.setItem('siraBahce12Tables', JSON.stringify(tables));
-                
-                renderTables();
-                
-                alert(`Tebrikler! Masa ${parseInt(selectedIdx) + 1} adınıza başarıyla rezerve edildi.`);
-                resForm.reset();
-            });
-
-            renderTables();
-        });
+        // Önceki sayfada yazdığımız yol tarifi fonksiyonu aynen burada kalacak
+        function getDirections(e) { /* ... */ }
+        // Diğer localStorage masa rezervasyon fonksiyonları aynen burada kalacak
+        document.addEventListener('DOMContentLoaded', () => { /* ... */ });
     </script>
 </body>
 </html>
