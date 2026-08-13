@@ -226,19 +226,23 @@
 
         // Yönetici Panelini Başlatmak İçin "Gizli Tuş Kombinasyonu"
         // Footer'daki telif hakkı yazısına (2026 Şîra Bahçe) çift tıklayınca sistemi aktif eder.
+       // Yönetici Panelini Başlatmak İçin "Gizli Tuş Kombinasyonu"
         document.querySelector('footer').addEventListener('dblclick', () => {
             alert("Kasa / Yönetici Modu Aktifleştirildi! Yeni çağrılar dinleniyor...");
             
+            let ilkYukleme = true; // Sayfa ilk açıldığındaki eski veriyi atlamak için
+
             // "cagrilar" veritabanını dinlemeye başla
             db.ref('cagrilar').limitToLast(1).on('child_added', (snapshot) => {
-                const data = snapshot.val();
-                
-                // Sadece son 1 dakika içindeki çağrılara ses çal (Geçmişleri çalmamak için)
-                const now = Date.now();
-                if (now - data.timestamp < 60000) { 
-                    playAlertSound();
-                    showAdminAlert(data.masa, data.talep, data.saat);
+                if (ilkYukleme) {
+                    ilkYukleme = false;
+                    return; // Eskiden kalma son 1 siparişi yoksay, ötme
                 }
+                
+                // Artık sadece YENİ basılan butonlarda burası çalışacak
+                const data = snapshot.val();
+                playAlertSound();
+                showAdminAlert(data.masa, data.talep, data.saat);
             });
         });
 
