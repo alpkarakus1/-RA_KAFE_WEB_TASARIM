@@ -185,58 +185,69 @@
     <!-- YENİ: Bildirim (Toast) Konteyneri -->
     <div id="toastContainer" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-[90%] max-w-sm flex flex-col gap-2"></div>
 
+ <!-- Firebase CDN SDK (v8 Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <!-- JavaScript Mantığı -->
     <script>
-        // 1. URL'den Masa Numarasını Oku (Örn: menu.html?masa=4)
+        // BURAYA FIREBASE'DEN ALDIĞIN firebaseConfig KODUNU YAPIŞTIR:
+       const firebaseConfig = {
+    apiKey: "AIzaSyDYPGv3F379PSli4z3C9P30gqhbho4SHnE",
+    authDomain: "sirabahce-21be3.firebaseapp.com",
+    databaseURL: "https://sirabahce-21be3-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "sirabahce-21be3",
+    storageBucket: "sirabahce-21be3.firebasestorage.app",
+    messagingSenderId: "753122069758",
+    appId: "1:753122069758:web:ba282e33f3676ccfa0a9af",
+    measurementId: "G-66FDDYP3ED"
+        };
+        // Firebase'i Başlat
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         const urlParams = new URLSearchParams(window.location.search);
         const masaNo = urlParams.get('masa');
         let currentTable = masaNo ? `Masa ${masaNo}` : "Tanımsız Masa";
 
-        // Eğer URL'de masa varsa, üst menüde şık bir şekilde göster
         if (masaNo) {
             const badge = document.getElementById('tableDisplayBadge');
             badge.textContent = currentTable;
             badge.classList.remove('hidden');
         }
 
-        // 2. Garson/Hesap İsteklerini Yönet
+        // Bulut Veritabanına İstek Gönderme
         function sendTableRequest(type) {
-            // Eğer müşteri QR kod okutmadan direkt menu.html'e girdiyse masa no iste
             if (!masaNo) {
                 let girilenMasa = prompt("Lütfen masanızın numarasını girin (Örn: 5):");
-                if (!girilenMasa) return; // İptale basarsa işlemi durdur
+                if (!girilenMasa) return;
                 currentTable = `Masa ${girilenMasa}`;
             }
 
             const islemAdi = type === 'garson' ? 'Garson çağrısı' : 'Hesap talebi';
             
-            // Arka planda localStorage'a yaz (Admin paneli buradan okuyabilir)
-            let requests = JSON.parse(localStorage.getItem('siraBahceRequests')) || [];
-            requests.push({
+            // Firebase'e veri yazma işlemi
+            db.ref('cagrilar').push({
                 masa: currentTable,
                 talep: islemAdi,
-                saat: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
+                saat: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                showToast(`✅ ${islemAdi} kasaya iletildi. En kısa sürede ilgilenilecek. (${currentTable})`);
+            }).catch((error) => {
+                alert("İstek gönderilirken bir hata oluştu: " + error);
             });
-            localStorage.setItem('siraBahceRequests', JSON.stringify(requests));
-
-            // Ekranda müşteriye şık bir bildirim (Toast) göster
-            showToast(`✅ ${islemAdi} kasaya iletildi. En kısa sürede ilgilenilecek. (${currentTable})`);
         }
 
-        // 3. Şık Bildirim (Toast) Oluşturucu
         function showToast(message) {
             const container = document.getElementById('toastContainer');
-            
             const toast = document.createElement('div');
             toast.className = 'bg-stone-900 text-white px-5 py-3 rounded-lg shadow-xl text-sm font-medium text-center toast-enter';
             toast.textContent = message;
-            
             container.appendChild(toast);
-
-            // 3.5 saniye sonra ekrandan kaybolsun
             setTimeout(() => {
                 toast.classList.replace('toast-enter', 'toast-leave');
-                setTimeout(() => toast.remove(), 400); // Animasyon bitince elementi sil
+                setTimeout(() => toast.remove(), 400); 
             }, 3500);
         }
     </script>
