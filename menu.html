@@ -1,1 +1,201 @@
+<!DOCTYPE html>
+<html lang="tr" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menü | Şîra Bahçe</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandGreen: '#2D4A3E',
+                        brandGold: '#C5A059',
+                        brandLight: '#F7F5F0'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-brandLight text-stone-800">
 
+    <!-- Header (Aynı navigasyon yapısı) -->
+    <header class="fixed w-full bg-white/90 backdrop-blur-md shadow-sm z-50 transition-all">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold font-serif text-brandGreen tracking-wide">ŞÎRA BAHÇE</a>
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                <a href="index.html#hakkimizda" class="hover:text-brandGold transition">Hakkımızda</a>
+                <a href="menu.html" class="text-brandGold font-bold border-b-2 border-brandGold pb-1">Menü</a>
+                <a href="index.html#rezervasyon" class="hover:text-brandGold transition">Canlı Masa Durumu</a>
+                <a href="index.html#konum" class="hover:text-brandGold transition">İletişim & Konum</a>
+            </nav>
+            <a href="index.html#rezervasyon" class="bg-brandGreen hover:bg-emerald-900 text-white px-5 py-2.5 rounded-full text-sm font-medium transition shadow-md">
+                Rezervasyon Yap
+            </a>
+        </div>
+    </header>
+
+    <!-- Menü Başlık Alanı -->
+    <section class="pt-32 pb-12 px-6 text-center">
+        <span class="text-brandGold font-semibold text-sm uppercase tracking-wider">Doğadan Masanıza</span>
+        <h1 class="text-4xl md:text-5xl font-bold text-brandGreen font-serif mt-3">Şîra Bahçe Menüsü</h1>
+        <p class="text-stone-600 mt-4 max-w-xl mx-auto">Özenle seçilmiş malzemelerle hazırladığımız lezzetlerimizi inceleyin.</p>
+    </section>
+
+    <!-- Menü İçeriği -->
+    <section class="py-12 px-6 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-16">
+            
+            <!-- Kahvaltılıklar -->
+            <div>
+                <h2 class="text-2xl font-serif text-stone-800 border-b border-brandGold/30 pb-2 mb-6 flex items-center gap-2">
+                    <span>🍳</span> Kahvaltılıklar
+                </h2>
+                <ul class="space-y-6">
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <div class="pr-4">
+                            <h4 class="font-bold text-lg">Serpme Köy Kahvaltısı</h4>
+                            <p class="text-sm text-stone-500 mt-1">Organik reçeller, peynir çeşitleri, sahanda yumurta, pişi (İki Kişilik)</p>
+                        </div>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">450 ₺</span>
+                    </li>
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <div class="pr-4">
+                            <h4 class="font-bold text-lg">Muhlama</h4>
+                            <p class="text-sm text-stone-500 mt-1">Trabzon tereyağı ve özel telli peynir ile</p>
+                        </div>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">180 ₺</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Tavuk Yemekleri -->
+            <div>
+                <h2 class="text-2xl font-serif text-stone-800 border-b border-brandGold/30 pb-2 mb-6 flex items-center gap-2">
+                    <span>🍗</span> Tavuk Yemekleri
+                </h2>
+                <ul class="space-y-6">
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <div class="pr-4">
+                            <h4 class="font-bold text-lg">Kekikli Tavuk Izgara</h4>
+                            <p class="text-sm text-stone-500 mt-1">Özel baharatlarla marine edilmiş tavuk göğsü, patates tava ile</p>
+                        </div>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">240 ₺</span>
+                    </li>
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <div class="pr-4">
+                            <h4 class="font-bold text-lg">Köri Soslu Tavuk</h4>
+                            <p class="text-sm text-stone-500 mt-1">Krema, mantar ve köri sosuyla harmanlanmış tavuk parçaları</p>
+                        </div>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">260 ₺</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Makarnalar -->
+            <div>
+                <h2 class="text-2xl font-serif text-stone-800 border-b border-brandGold/30 pb-2 mb-6 flex items-center gap-2">
+                    <span>🍝</span> Makarnalar
+                </h2>
+                <ul class="space-y-6">
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <div class="pr-4">
+                            <h4 class="font-bold text-lg">Fettuccine Alfredo</h4>
+                            <p class="text-sm text-stone-500 mt-1">Tavuk dilimleri, mantar, krema ve parmesan peyniri</p>
+                        </div>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">220 ₺</span>
+                    </li>
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <div class="pr-4">
+                            <h4 class="font-bold text-lg">Penne Arrabbiata</h4>
+                            <p class="text-sm text-stone-500 mt-1">Acılı domates sosu, siyah zeytin ve taze fesleğen</p>
+                        </div>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">190 ₺</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Nargile -->
+            <div>
+                <h2 class="text-2xl font-serif text-stone-800 border-b border-brandGold/30 pb-2 mb-6 flex items-center gap-2">
+                    <span>💨</span> Nargile
+                </h2>
+                <ul class="space-y-6">
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <div class="pr-4">
+                            <h4 class="font-bold text-lg">Şîra Özel Karışım</h4>
+                            <p class="text-sm text-stone-500 mt-1">Kavun, çilek, nane ve özel buzlu takım</p>
+                        </div>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">350 ₺</span>
+                    </li>
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <div class="pr-4">
+                            <h4 class="font-bold text-lg">Klasik Elma / Anason</h4>
+                            <p class="text-sm text-stone-500 mt-1">Geleneksel köz eşliğinde klasik takım</p>
+                        </div>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">300 ₺</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sıcak İçecekler -->
+            <div>
+                <h2 class="text-2xl font-serif text-stone-800 border-b border-brandGold/30 pb-2 mb-6 flex items-center gap-2">
+                    <span>☕</span> Sıcak İçecekler
+                </h2>
+                <ul class="space-y-6">
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <h4 class="font-bold text-lg">Demleme Çay</h4>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">25 ₺</span>
+                    </li>
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <h4 class="font-bold text-lg">Türk Kahvesi</h4>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">65 ₺</span>
+                    </li>
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <h4 class="font-bold text-lg">Caffe Latte</h4>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">85 ₺</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Soğuk İçecekler -->
+            <div>
+                <h2 class="text-2xl font-serif text-stone-800 border-b border-brandGold/30 pb-2 mb-6 flex items-center gap-2">
+                    <span>🥤</span> Soğuk İçecekler
+                </h2>
+                <ul class="space-y-6">
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <h4 class="font-bold text-lg">Taze Sıkım Portakal Suyu</h4>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">80 ₺</span>
+                    </li>
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <h4 class="font-bold text-lg">Şîra Limonata</h4>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">75 ₺</span>
+                    </li>
+                    <li class="flex justify-between items-baseline border-b border-stone-200 border-dashed pb-2">
+                        <h4 class="font-bold text-lg">Buzlu Americano</h4>
+                        <span class="font-bold text-brandGreen whitespace-nowrap">90 ₺</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-8 mt-12 border-t border-stone-800 text-center text-sm">
+        <p>&copy; 2026 Şîra Bahçe. Tüm Hakları Saklıdır.</p>
+    </footer>
+
+</body>
+</html>
